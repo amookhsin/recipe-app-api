@@ -9,9 +9,16 @@ services:
         - USERNAME=appuser
         - UID=1001
         - WORKDIR=/home/appuser/app
+    environment:
+      - DEBUG=${DEBUG}
+      - SECRET_KEY=${SECRET_KEY}
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_HOST=${POSTGRES_HOST}
+      - DB_PORT=${POSTGRES_PORT}
     ports:
       - "3014:5000"
-    env_file: ./server/configs/.env
     volumes:
       - "./server:/home/appuser/app"
     command: >
@@ -20,6 +27,6 @@ services:
             python manage.py runserver 0.0.0.0:5000"
     depends_on:
       - db
+
   db:
     image: postgres:alpine
-    env_file: ./server/configs/.env
