@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - PYTHON=3.8
+        - USERNAME=appuser
+        - UID=1001
+        - WORKDIR=/home/appuser/app
+    ports:
+      - "3014:5000"
+    env_file: ./server/configs/.env
+    volumes:
+      - "./server:/home/appuser/app"
+    command: >
+      sh -c "[ -f manage.py ] || \
+            django-admin startproject app . && \
+            python manage.py runserver 0.0.0.0:5000"
+    depends_on:
+      - db
+  db:
+    image: postgres:alpine
+    env_file: ./server/configs/.env
