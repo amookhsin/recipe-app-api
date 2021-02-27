@@ -1,0 +1,45 @@
+version: "3.8"
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - PYTHON=3.8
+        - USERNAME=appuser
+        - UID=1001
+        - WORKDIR=/home/appuser/app
+    environment:
+      - DEBUG=${DEBUG}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - DB_HOST=${POSTGRES_HOST}
+      - DB_PORT=${POSTGRES_PORT}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_NAME=${POSTGRES_DB}
+    ports:
+      - "3014:5000"
+    volumes:
+      - "./server:/home/appuser/app"
+    command: >
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:5000"
+    depends_on:
+      - db
+
+  pgadmin:
+    image: dpage/pgadmin4:5
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      - db
+    ports:
+      - "3015:80"
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
