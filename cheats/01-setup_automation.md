@@ -68,7 +68,7 @@ services:
       args:
         - PYTHON=3.8
         - USERNAME=appuser
-        - UID=1001
+        - UID=1000
         - WORKDIR=/home/appuser/app
     environment:
       - DEBUG=${DEBUG}
@@ -157,6 +157,28 @@ script:
 1. ساخت حساب در [گیت‌لب][1] /[گیت‌هاب][2] و [TravisCI][3]
 2. کامیت گرفتن از پروژه و push کردن در مخزن‌اش
 3. پیوندیدن مخزن پروژه به TravisCI برای اجرای فرایندهای توسعه‌ی خودکار و تعریفیدن متغیرهای محلی
+
+## اجراییدن پروژه
+
+1. اجراییدن دستود زیر در خط فرمان در مسیر ریشه‌ی پروژه:
+
+    <div dir="ltr" align="left" markdown="1">
+
+    ```shell
+    docker-compose up
+    ```
+
+    </div>
+
+2. دیدن صفحه آغازین جنگو در مسیر زیر:
+
+    <div dir="ltr" align="left" markdown="1">
+
+    ```txt
+    http://localhost:3014/
+    ```
+
+    </div>
 
 [1]: https://gitlab.com/
 [2]: https://github.com/
